@@ -1,9 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config();
 
-const stuffRoutes = require('./routes/stuff');
+const booksRoutes = require('./routes/books');
+const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://croq45:RPPPQYV5KCQWfPXz@go-fullstack.5n13j.mongodb.net/?retryWrites=true&w=majority&appName=Go-fullstack')
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@go-fullstack.5n13j.mongodb.net/?retryWrites=true&w=majority&appName=Go-fullstack`)
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
@@ -21,6 +24,6 @@ app.use(express.json());
 
 app.use('/api/books', booksRoutes);
 app.use('/api/auth', userRoutes);
-
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
