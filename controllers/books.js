@@ -19,6 +19,7 @@ exports.createBook = (req, res, next) => {
     ...bookObject,
     userId: req.auth.userId,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    averageRating: bookObject.ratings[0].grade,
      
   });
   // Saving the book in the database
@@ -27,41 +28,66 @@ exports.createBook = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
-// POST: add a rating to a existing book
-exports.addBookRating = (req, res, next) => {
-    const userId = req.auth.userId; // ID de l'utilisateur authentifié
-    const { rating } = req.body;     // Note envoyée dans la requête (appelée "rating" dans ton frontend)
-    const bookId = req.params.id;    // ID du livre à noter
 
-    // Vérifier que la note est bien comprise entre 0 et 5
+// POST: add a rating to an existing book
+exports.addBookRating = (req, res, next) => {
+    const userId = req.auth.userId; 
+    const { rating } = req.body;     
+    const bookId = req.params.id;    
+
+    // Check if the rating is between 0 and 5
     if (rating < 0 || rating > 5) {
-        return res.status(400).json({ message: 'La note doit être comprise entre 0 et 5.' });
+        return res.status(400).json({ message: 'Rating should be between 0 and 5.' });
     }
 
-    // Recherche du livre par ID
+    // Find the book by ID
     Book.findOne({ _id: bookId })
         .then((book) => {
             if (!book) {
-                return res.status(404).json({ message: 'Livre non trouvé.' });
+                return res.status(404).json({ message: 'Book not found.' });
             }
 
-            // Vérifier si l'utilisateur a déjà noté ce livre
+            // Check if the user has already rated the book
             const existingRating = book.ratings.find(r => r.userId === userId);
             if (existingRating) {
-                return res.status(403).json({ message: 'Vous avez déjà noté ce livre.' });
+                return res.status(403).json({ message: 'You have already rated this book.' });
             }
 
-            // Utiliser $push pour ajouter la nouvelle note avec le userId et la note (rating)
-            Book.updateOne(
-                { _id: bookId },
-                { $push: { ratings: { userId, grade: rating } } } // On ajoute la note sous "grade" dans ratings
-            )
-                .then(() => res.status(200).json({ message: 'Note ajoutée avec succès.' }))
+            // Add the new rating
+            book.ratings.push({ userId, grade: rating });
+
+            // Calculate the new average rating
+            const totalRatings = book.ratings.length;
+            const sumRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0);
+            const newAverageRating = sumRatings / totalRatings;
+
+            // Update the book's average rating
+            book.averageRating = newAverageRating;
+
+            // Save the book with the new rating and updated average
+            book.save()
+                .then(() => res.status(200).json({ message: 'Rating added successfully.', averageRating: newAverageRating }))
                 .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
 };
 
+//GET: 3 best rated books
+exports.getBestBooks = (req, res, next) => {
+    // Find all books and sort them by averageRating in descending order (highest first)
+    Book.find()
+        .sort({ averageRating: -1 })  // Sort by averageRating in descending order
+        .limit(3)                      // Limit the result to the top 3 books
+        .then((books) => {
+            if (books.length === 0) {
+                return res.status(404).json({ message: 'No books found.' });
+            }
+            res.status(200).json(books);  // Send the top 3 books in the response
+        })
+        .catch((error) => {
+            res.status(500).json({ error: 'An error occurred while retrieving the books.' });
+        });
+};
 
 
 
