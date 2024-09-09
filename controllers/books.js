@@ -31,46 +31,40 @@ exports.createBook = (req, res, next) => {
 
 // POST: add a rating to an existing book
 exports.addBookRating = (req, res, next) => {
-    const userId = req.auth.userId; 
-    const { rating } = req.body;     
-    const bookId = req.params.id;    
-
-    // Check if the rating is between 0 and 5
-    if (rating < 0 || rating > 5) {
-        return res.status(400).json({ message: 'Rating should be between 0 and 5.' });
+    const updatedRating = {
+        userId: req.auth.userId,
+        grade: req.body.rating
+    };
+    
+    // Validate that the rating is between 0 and 5
+    if (updatedRating.grade < 0 || updatedRating.grade > 5) {
+        return res.status(400).json({ message: 'Rating must be between 0 and 5' });
     }
 
     // Find the book by ID
-    Book.findOne({ _id: bookId })
+    Book.findOne({ _id: req.params.id }) 
         .then((book) => {
-            if (!book) {
-                return res.status(404).json({ message: 'Book not found.' });
-            }
-
             // Check if the user has already rated the book
-            const existingRating = book.ratings.find(r => r.userId === userId);
-            if (existingRating) {
-                return res.status(403).json({ message: 'You have already rated this book.' });
+            if (book.ratings.find(r => r.userId === req.auth.userId)) { 
+                return res.status(400).json({ message: 'You have already rated this book' });
+            } else {
+                // Add the new rating to the ratings array
+                book.ratings.push(updatedRating); 
+
+                // Calculate the new average rating, ensuring it has one decimal place
+                const newAverageRating = (book.averageRating * (book.ratings.length - 1) + updatedRating.grade) / book.ratings.length;
+
+                // Format the average rating to one decimal place
+                book.averageRating = parseFloat(newAverageRating.toFixed(1));
+
+                // Save the book with the new rating and updated average rating
+                return book.save(); 
             }
-
-            // Add the new rating
-            book.ratings.push({ userId, grade: rating });
-
-            // Calculate the new average rating
-            const totalRatings = book.ratings.length;
-            const sumRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0);
-            const newAverageRating = sumRatings / totalRatings;
-
-            // Update the book's average rating
-            book.averageRating = newAverageRating;
-
-            // Save the book with the new rating and updated average
-            book.save()
-                .then(() => res.status(200).json({ message: 'Rating added successfully.', averageRating: newAverageRating }))
-                .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(500).json({ error }));
+        .then((updatedBook) => res.status(201).json(updatedBook))
+        .catch(error => res.status(400).json({ error }));
 };
+
 
 //GET: 3 best rated books
 exports.getBestBooks = (req, res, next) => {
