@@ -17,31 +17,32 @@
 - Node.js
 - npm
 
-### Installation de Node.js et npm
+## Installation de Node.js et npm
 
 Pour installer Node.js et npm, suivez les instructions suivantes :
 
-#### Sur Windows
+### Sur Windows
 
 1. Téléchargez l'installeur depuis le site officiel de Node.js : [https://nodejs.org/](https://nodejs.org/)
 2. Exécutez l'installeur et suivez les instructions à l'écran.
 
-#### Sur macOS
+### Sur macOS
 
 1. Vous pouvez utiliser Homebrew pour installer Node.js et npm :
 
 
 `brew install node`
 
-#### Sur Linux
+### Sur Linux
 
 1. Vous pouvez utiliser le gestionnaire de paquets de votre distribution pour installer Node.js et npm. Par exemple, sur Ubuntu :
 
 sudo apt update
 sudo apt install nodejs npm
 
-##### Installation et Démarrage
-1. Clonez le dépot dans votre éditeur de code via le terminal de votre éditeur de code ou la console de commandes
+## Installation et Démarrage
+
+1. Clonez le dépot dans votre éditeur de code via le terminal 
 
 `git clone https://github.com/DemoraTenshi/OC-P6-Mon_Vieux_Grimoire.git`
 
@@ -53,7 +54,7 @@ sudo apt install nodejs npm
 une  pour le dossier frontend et une pour le dossier backend.
 
 
-###### Installation des dépendances du front et démarrage du front
+### Installation des dépendances du front et démarrage du front
 1. Ouvrez un terminal dans le dossier front.
 2. Installez les dépendances :
 
@@ -64,7 +65,7 @@ une  pour le dossier frontend et une pour le dossier backend.
 `npm start`
 
 
-###### Installation des dépendances du back et démarrage du back
+### Installation des dépendances du back et démarrage du back
 
 1. Ouvrez un terminal dans le dossier back.
 2. Installez les dépendances :
@@ -75,3 +76,5 @@ une  pour le dossier frontend et une pour le dossier backend.
 3.Démarrez l'application back-end :
 
 `npm start`
+
+
