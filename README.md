@@ -41,7 +41,7 @@ sudo apt update
 sudo apt install nodejs npm
 
 ##### Installation et Démarrage
-1. Clonez le dépot dans votre éditeur de code
+1. Clonez le dépot dans votre éditeur de code via le terminal de votre éditeur de code ou la console de commandes
 
 `git clone https://github.com/DemoraTenshi/OC-P6-Mon_Vieux_Grimoire.git`
 
