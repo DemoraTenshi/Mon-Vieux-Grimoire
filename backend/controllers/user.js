@@ -32,20 +32,20 @@ function isStrongPassword(password) {
 }
 
 exports.signup = (req, res, next) => {
-    // Valider l'email avant de procéder
+    // Validate email before proceeding
     if (!validator.isEmail(req.body.email)) {
         return res.status(400).json({ message: 'Email invalide' });
     }
 
-    // Valider la complexité du mot de passe
+    // Confirm password complexity
     if (!isStrongPassword(req.body.password)) {
         return res.status(400).json({
             message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.'
         });
     }
 
-    // Hachage du mot de passe avec un coût augmenté pour plus de sécurité
-    bcrypt.hash(req.body.password, 12) // Utilisation de 12 pour le facteur de coût
+    // Password hashing at increased cost for greater security
+    bcrypt.hash(req.body.password, 12) 
         .then(hash => {
             const user = new User({
                 email: req.body.email,
@@ -59,7 +59,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    // Valider l'email avant de procéder
+    // Validate email before proceeding
     if (!validator.isEmail(req.body.email)) {
         return res.status(400).json({ message: 'Email invalide' });
     }
@@ -69,7 +69,7 @@ exports.login = (req, res, next) => {
             if (!user) {
                 return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
             }
-            // Comparaison sécurisée du mot de passe haché
+            // Secure hashed password comparison
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
@@ -79,8 +79,8 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            secret, // Clé secrète sécurisée
-                            { expiresIn: '24h' } // Durée de vie du token
+                            secret, // Secure secret key
+                            { expiresIn: '24h' } // Token lifetime
                         )
                     });
                 })
@@ -89,5 +89,5 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-// Exposer le limitateur pour l'utiliser dans les routes
+// Export the limiter for use in routes
 exports.loginLimiter = loginLimiter;

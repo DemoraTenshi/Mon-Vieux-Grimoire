@@ -2,6 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const CryptoJS = require('crypto-js');
 
+//Decrypts the .env.encrypt file to access the DB
 const secretKey = 'z2KVl`bpsTtP~2kGyt*';
 const encryptedData = fs.readFileSync('.env.encrypted', 'utf8');
 

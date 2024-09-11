@@ -4,13 +4,13 @@ module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         
-        // Utilisation de la clé secrète depuis les variables d'environnement
+        // Using secret keys from environment variables
         const secret = process.env.JWT_SECRET || 'defaultSecretKey';
         const decodedToken = jwt.verify(token, secret);
         
         const userId = decodedToken.userId;
         
-        // Ajouter le userId à la requête pour l'utiliser dans les routes suivantes
+        // Add the userId to the request to use it in the following routes
         req.auth = { userId };
         
         next();
