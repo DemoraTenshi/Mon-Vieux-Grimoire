@@ -5,8 +5,9 @@ require('dotenv').config();
 
 const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
+let connectLink = process.env.MONGODB_URI
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@go-fullstack.5n13j.mongodb.net/?retryWrites=true&w=majority&appName=Go-fullstack`)
+mongoose.connect(connectLink)
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 

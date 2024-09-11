@@ -15,6 +15,6 @@ Pour installer les dépendances et configurer l'application, exécutez la comman
 
 ### Démarrage de l'app
 
-`npm server`
+`npm start`
 
 
