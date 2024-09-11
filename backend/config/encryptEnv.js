@@ -2,7 +2,7 @@ require('dotenv').config();
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 
-const secretKey = ENCRYPTION_KEY
+const secretKey = 'z2KVl`bpsTtP~2kGyt*'
 
 const data = {
   DB_CONNECT: process.env.DB_CONNECT ,

@@ -2,7 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const CryptoJS = require('crypto-js');
 
-const secretKey = ENCRYPTION_KEY;
+const secretKey = 'z2KVl`bpsTtP~2kGyt*';
 const encryptedData = fs.readFileSync('.env.encrypted', 'utf8');
 
 const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
