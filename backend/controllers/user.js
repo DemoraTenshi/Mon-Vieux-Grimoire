@@ -4,23 +4,23 @@ const validator = require('validator');
 const rateLimit = require('express-rate-limit');
 const User = require('../models/User');
 
-// Utiliser une clé secrète plus sécurisée via les variables d'environnement
+// Use of a secret key
 const secret = process.env.JWT_SECRET || 'defaultSecretKey';
 
-// Limiteur de tentatives de connexion
+// limiting time between connexion attempts
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // Limite à 5 tentatives de connexion par IP
     message: 'Trop de tentatives de connexion, réessayez dans 15 minutes'
 });
 
-// Fonction pour vérifier la force du mot de passe
+// control if strong passwordd
 function isStrongPassword(password) {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /[0-9]/.test(password);
-    const hasSpecialChar = /[\W_]/.test(password); // Vérifie la présence de caractères spéciaux
+    const hasSpecialChar = /[\W_]/.test(password); 
 
     return (
         password.length >= minLength &&
