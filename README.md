@@ -41,8 +41,8 @@ Pour installer Node.js et npm, suivez les instructions suivantes :
 
 1. Vous pouvez utiliser le gestionnaire de paquets de votre distribution pour installer Node.js et npm. Par exemple, sur Ubuntu :
 
-sudo apt update
-sudo apt install nodejs npm
+`sudo apt update`
+`sudo apt install nodejs npm`
 
 ## Installation et Démarrage
 
@@ -77,7 +77,7 @@ une  pour le dossier frontend et une pour le dossier backend.
 `npm install`
 
 
-3.Démarrez l'application back-end :
+3. Démarrez l'application back-end :
 
 `npm start`
 
