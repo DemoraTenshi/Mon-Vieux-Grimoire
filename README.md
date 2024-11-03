@@ -1,4 +1,8 @@
-# Mon Application
+![Mon Vieux Grimoire Logo](/frontend/src/images/Logo.png)
+
+# Application Mon vieux Grimoire
+
+Bienvenue dans le repo du projet OpenClassrooms 6: Mon Vieux Grimoire. L'objectif de ce projet est de créer le backend de l'application de notation de livres Mon Vieux Grimoire.
 
 ![Bannière du site](./images/banniere_mon_vieux_grimoire.png)
 
